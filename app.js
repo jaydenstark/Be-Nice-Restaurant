@@ -79,4 +79,39 @@ document.querySelectorAll('.gallery-item').forEach(item => {
   });
 });
 
+// THEME TOGGLE (Night / Light Mode)
+const themeToggleBtns = document.querySelectorAll('#theme-toggle-btn, #m-theme-toggle-btn');
+const savedTheme = localStorage.getItem('theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
+  document.documentElement.setAttribute('data-theme', 'light');
+  updateThemeIcons(true);
+} else {
+  document.documentElement.removeAttribute('data-theme');
+  updateThemeIcons(false);
+}
+
+function updateThemeIcons(isLight) {
+  const iconText = isLight ? '🌙' : '☀️';
+  document.querySelectorAll('.theme-toggle-icon').forEach(icon => {
+    icon.textContent = iconText;
+  });
+}
+
+function toggleTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'dark');
+    updateThemeIcons(false);
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
+    updateThemeIcons(true);
+  }
+}
+
+themeToggleBtns.forEach(btn => btn?.addEventListener('click', toggleTheme));
+
 console.log('Be-Nice Restaurant & Bar | Tema, Ghana');
